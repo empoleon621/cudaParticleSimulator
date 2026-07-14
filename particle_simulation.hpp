@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 struct Vec2 {
     float x;
     float y;
@@ -14,8 +16,11 @@ struct particle {
 };
 
 void updateParticle(particle& p, float deltaTime);
-void update(particle& p, float deltaTime, Vec2 G, float height);
+void update(particle& p, float deltaTime, Vec2 G, float height,float width);
 void resetAcceleration(particle& p, float deltaTime);
 void applyGravity(particle& p,float deltaTime, Vec2 G);
-void floorBounce(particle& p, float height);
+void floorBounce(particle& p, float height,float width);
 
+void addParticle(const particle& p);
+void updateParticles(float deltaTime, Vec2 gravity, float height, float width);
+const std::vector<particle>& getParticles();

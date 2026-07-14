@@ -1,6 +1,5 @@
 #include <raylib.h>
 #include "particle_simulation.hpp"
-#include <vector>
 
 int main()
 {
@@ -9,8 +8,6 @@ int main()
 
     InitWindow(screenWidth, screenHeight, "CUDA Particle Simulator");
     SetTargetFPS(60);
-
-    std::vector<particle> particleList;
 
     // particle test{
     //     {10,10},
@@ -24,22 +21,20 @@ int main()
     while (!WindowShouldClose()) {
     float deltaTime = GetFrameTime();
     
-    for (particle& test: particleList){
-    update(test,deltaTime,G,screenHeight);
-    }
+    updateParticles(deltaTime, G, screenHeight, screenWidth);
 
 
-    // if (IsKeyPressed(KEY_UP))
-    //     G= {0.0f, -500.0f};
+    if (IsKeyPressed(KEY_UP))
+        G= {0.0f, -500.0f};
 
-    // if (IsKeyPressed(KEY_DOWN))
-    //     G = {0.0f, 500.0f};
+    if (IsKeyPressed(KEY_DOWN))
+        G = {0.0f, 500.0f};
 
-    // if (IsKeyPressed(KEY_LEFT))
-    //     G = {-500.0f, 0.0f};
+    if (IsKeyPressed(KEY_LEFT))
+        G = {-500.0f, 0.0f};
 
-    // if (IsKeyPressed(KEY_RIGHT))
-    //     G = {500.0f, 0.0f};
+    if (IsKeyPressed(KEY_RIGHT))
+        G = {500.0f, 0.0f};
     particle test{
         {GetMousePosition().x,GetMousePosition().y},
         {0,0},
@@ -49,12 +44,12 @@ int main()
     };
 
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
-        particleList.push_back(test);
+        addParticle(test);
     }
 
     BeginDrawing();
     ClearBackground(WHITE);
-    for (particle test: particleList){
+    for (const particle& test: getParticles()){
         DrawCircle(
         static_cast<int>(test.pos.x),
         static_cast<int>(test.pos.y),
