@@ -13,6 +13,7 @@ struct particle {
     Vec2 a;
     float radius;
     float mass;
+    float e;
 };
 
 void updateParticle(particle& p, float deltaTime);
@@ -24,3 +25,6 @@ void floorBounce(particle& p, float height,float width);
 void addParticle(const particle& p);
 void updateParticles(float deltaTime, Vec2 gravity, float height, float width);
 const std::vector<particle>& getParticles();
+float dotProduct(Vec2 a, Vec2 b);
+void ballCollision();
+

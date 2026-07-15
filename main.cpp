@@ -40,7 +40,8 @@ int main()
         {0,0},
         {0,0},
         10,
-        10
+        10,
+        .9
     };
 
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
