@@ -18,52 +18,53 @@ int main()
     // };
     Vec2 G{0.0f, 500.0f};
 
-    while (!WindowShouldClose()) {
-    float deltaTime = GetFrameTime();
-    
-    updateParticles(deltaTime, G, screenHeight, screenWidth);
+    while (!WindowShouldClose())
+    {
+        float deltaTime = GetFrameTime();
 
+        updateParticles(deltaTime, G, screenHeight, screenWidth);
 
-    if (IsKeyPressed(KEY_UP))
-        G= {0.0f, -500.0f};
+        if (IsKeyPressed(KEY_UP))
+            G = {0.0f, -500.0f};
 
-    if (IsKeyPressed(KEY_DOWN))
-        G = {0.0f, 500.0f};
+        if (IsKeyPressed(KEY_DOWN))
+            G = {0.0f, 500.0f};
 
-    if (IsKeyPressed(KEY_LEFT))
-        G = {-500.0f, 0.0f};
+        if (IsKeyPressed(KEY_LEFT))
+            G = {-500.0f, 0.0f};
 
-    if (IsKeyPressed(KEY_RIGHT))
-        G = {500.0f, 0.0f};
-    particle test{
-        {GetMousePosition().x,GetMousePosition().y},
-        {0,0},
-        {0,0},
-        4,
-        10,
-        .9
-    };
+        if (IsKeyPressed(KEY_RIGHT))
+            G = {500.0f, 0.0f};
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        {
+            for (int i = 0; i < 500; i++)
+            {
+                particle test{
+                    {GetMousePosition().x + GetRandomValue(-20, 20),
+                     GetMousePosition().y + GetRandomValue(-20, 20)},
+                    {0, 0},
+                    {0, 0},
+                    7,
+                    10,
+                    .9};
 
-    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
-        for (int i = 0; i<500 ;i++){
-        addParticle(test);
-
+                addParticle(test);
+            }
         }
-    }
 
-    BeginDrawing();
-    ClearBackground(WHITE);
-    for (const particle& test: getParticles()){
-        DrawCircle(
-        static_cast<int>(test.pos.x),
-        static_cast<int>(test.pos.y),
-        test.radius,
-        BLUE
-    );
-    }
+        BeginDrawing();
+        ClearBackground(WHITE);
+        for (const particle &test : getParticles())
+        {
+            DrawCircle(
+                static_cast<int>(test.pos.x),
+                static_cast<int>(test.pos.y),
+                test.radius,
+                BLUE);
+        }
 
-    EndDrawing();
-}
+        EndDrawing();
+    }
 
     CloseWindow();
     return 0;

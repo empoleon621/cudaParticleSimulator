@@ -37,28 +37,40 @@ void applyGravity(particle &p, float deltaTime, Vec2 G)
 
 void floorBounce(particle &p, float height, float width)
 {
+    constexpr float wallRestitution = 0.9f;
+    constexpr float restVelocity = 40.0f;
+    constexpr float floorFriction = 0.98f;
+
     // floor collision
     if (p.pos.y + p.radius >= height && p.v.y > 0)
     {
         p.pos.y = height - p.radius;
-        p.v.y = p.v.y * -0.9;
+        if (p.v.y < restVelocity)
+        {
+            p.v.y = 0.0f;
+        }
+        else
+        {
+            p.v.y *= -wallRestitution;
+        }
+        p.v.x *= floorFriction;
     }
     // ceiling collision
     if (p.pos.y - p.radius <= 0 && p.v.y < 0)
     {
         p.pos.y = p.radius;
-        p.v.y = p.v.y * -0.9;
+        p.v.y *= -wallRestitution;
     }
 
     if (p.pos.x + p.radius >= width && p.v.x > 0)
     {
         p.pos.x = width - p.radius;
-        p.v.x = p.v.x * -0.9;
+        p.v.x *= -wallRestitution;
     }
     if (p.pos.x - p.radius <= 0 && p.v.x < 0)
     {
         p.pos.x = p.radius;
-        p.v.x = p.v.x * -0.9;
+        p.v.x *= -wallRestitution;
     }
 }
 
@@ -123,7 +135,13 @@ void ballCollision()
                 }
 
                 // Overlap correction
-                float overlap = (a.radius + b.radius) - dist;
+                constexpr float correctionPercent = 0.8f;
+                constexpr float slop = 0.01f;
+                float overlap = ((a.radius + b.radius) - dist - slop) * correctionPercent;
+                if (overlap <= 0.0f)
+                {
+                    continue;
+                }
 
                 float inverseMassA = 1.0f / a.mass;
                 float inverseMassB = 1.0f / b.mass;
@@ -155,8 +173,12 @@ void updateParticles(float deltaTime, Vec2 gravity, float height, float width)
     {
         update(p, deltaTime, gravity, height, width);
     }
-    ballCollision();
 
+    constexpr int collisionIterations = 4;
+    for (int i = 0; i < collisionIterations; i++)
+    {
+        ballCollision();
+    }
 }
 
 const std::vector<particle> &getParticles()
