@@ -39,13 +39,16 @@ int main()
         {GetMousePosition().x,GetMousePosition().y},
         {0,0},
         {0,0},
-        10,
+        4,
         10,
         .9
     };
 
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
+        for (int i = 0; i<500 ;i++){
         addParticle(test);
+
+        }
     }
 
     BeginDrawing();

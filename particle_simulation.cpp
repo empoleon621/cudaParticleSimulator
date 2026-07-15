@@ -11,7 +11,6 @@ void update(particle &p, float deltaTime, Vec2 G, float height, float width)
     applyGravity(p, deltaTime, G);
     updateParticle(p, deltaTime);
     floorBounce(p, height, width);
-    ballCollision();
 }
 
 void resetAcceleration(particle &p, float deltaTime)
@@ -156,6 +155,8 @@ void updateParticles(float deltaTime, Vec2 gravity, float height, float width)
     {
         update(p, deltaTime, gravity, height, width);
     }
+    ballCollision();
+
 }
 
 const std::vector<particle> &getParticles()
