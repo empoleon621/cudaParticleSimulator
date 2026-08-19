@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstddef>
 #include <vector>
 
 struct Vec2 {
@@ -25,6 +26,9 @@ void floorBounce(particle& p, float height,float width);
 void addParticle(const particle& p);
 void updateParticles(float deltaTime, Vec2 gravity, float height, float width);
 const std::vector<particle>& getParticles();
+void setSpatialGridEnabled(bool enabled);
+bool isSpatialGridEnabled();
+std::size_t getCollisionChecksLastFrame();
 float dotProduct(Vec2 a, Vec2 b);
-void ballCollision();
+void ballCollision(float height, float width);
 
