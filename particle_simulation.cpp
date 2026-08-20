@@ -1,4 +1,5 @@
 #include "particle_simulation.hpp"
+#include "cuda_particles.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -8,6 +9,7 @@ namespace
 {
     std::vector<particle> particleList;
     bool spatialGridEnabled = true;
+    bool cudaEnabled = true;
     bool reverseCollisionOrder = false;
     std::size_t collisionChecksLastFrame = 0;
 
@@ -258,9 +260,33 @@ void addParticle(const particle &p)
     particleList.push_back(p);
 }
 
+void clearParticles()
+{
+    particleList.clear();
+}
+
 void updateParticles(float deltaTime, Vec2 gravity, float height, float width)
 {
     collisionChecksLastFrame = 0;
+
+    if (cudaEnabled && updateCudaParticles(
+            particleList,
+            deltaTime,
+            gravity,
+            height,
+            width,
+            spatialGridEnabled,
+            collisionChecksLastFrame))
+    {
+        return;
+    }
+
+    // If CUDA initialization or a kernel fails, keep the application usable
+    // and retain the particle state by falling back to the CPU solver.
+    if (cudaEnabled)
+    {
+        cudaEnabled = false;
+    }
 
     // Window dragging and debugger pauses can produce a huge frame time.
     // Clamp it so particles cannot jump through one another in a single step.
@@ -301,6 +327,32 @@ void setSpatialGridEnabled(bool enabled)
 bool isSpatialGridEnabled()
 {
     return spatialGridEnabled;
+}
+
+void setCudaEnabled(bool enabled)
+{
+    cudaEnabled = enabled && isCudaRuntimeAvailable();
+}
+
+bool isCudaEnabled()
+{
+    return cudaEnabled;
+}
+
+bool isCudaAvailable()
+{
+    return isCudaRuntimeAvailable();
+}
+
+const char *getCudaStatus()
+{
+    if (cudaEnabled)
+    {
+        return "CUDA";
+    }
+
+    const char *error = getLastCudaError();
+    return (error != nullptr && error[0] != '\0') ? error : "CPU";
 }
 
 std::size_t getCollisionChecksLastFrame()

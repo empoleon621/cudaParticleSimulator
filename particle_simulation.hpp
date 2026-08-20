@@ -24,10 +24,15 @@ void applyGravity(particle& p,float deltaTime, Vec2 G);
 void floorBounce(particle& p, float height,float width);
 
 void addParticle(const particle& p);
+void clearParticles();
 void updateParticles(float deltaTime, Vec2 gravity, float height, float width);
 const std::vector<particle>& getParticles();
 void setSpatialGridEnabled(bool enabled);
 bool isSpatialGridEnabled();
+void setCudaEnabled(bool enabled);
+bool isCudaEnabled();
+bool isCudaAvailable();
+const char* getCudaStatus();
 std::size_t getCollisionChecksLastFrame();
 float dotProduct(Vec2 a, Vec2 b);
 void ballCollision(float height, float width);
