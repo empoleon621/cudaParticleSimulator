@@ -14,6 +14,8 @@ Both backends can use either brute-force all-pairs collision detection or a
 uniform spatial grid. The backend and broad-phase algorithm can be switched
 while the application is running.
 
+Performance increase of **530x** from naive solution to CUDA accelerated particles w/ spatial grid
+
 
 RUNTIME CONTROLS
 ----------------
